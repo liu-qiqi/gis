@@ -1,0 +1,73 @@
+---
+title: "hw4"
+output: html_document
+date: "2022-11-02"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## packages
+
+```{r}
+library(tidyverse)
+library(sf)
+library(here)
+library(countrycode)
+library(janitor)
+```
+
+## Read in data
+
+Read in global gender inequality data and the world countries
+
+```{r}
+here::here()
+
+composite_indices <- read_csv(here::here("/Users/akira/Documents/CASA/GIS/WK4/hw4/hw4_data/HDR21-22_Composite_indices_complete_time_series.csv"), 
+                              locale = locale(encoding = "latin1"), 
+                              na = " ", 
+                              skip = 0)
+
+world <- st_read("hw4_data/World_Countries_(Generalized)/World_Countries__Generalized_.shp")
+```
+
+## Change column names
+
+Select columns
+Add a new column of difference in gender inequality between 2010 and 2019
+
+```{r}
+# Gender Inequality Index : short name `gii`
+gii <- composite_indices %>%
+  clean_names() %>%
+  select(iso3, country, gii_2010, gii_2019) %>%
+  mutate(diff_gii = gii_2019 - gii_2010)
+
+# change country code to fit with world countries
+gii <- gii %>%
+  mutate(country_code = countrycode(country, origin = 'country.name', destination = 'iso2c')) %>%
+  mutate(iso_code = countrycode(iso3, origin = 'iso3c', destination = 'iso2c'))
+
+```
+
+## Join
+
+Join the csv to .shp file
+left_join (.shp file, csv, by columns)
+
+```{r}
+join_gii <- world %>%
+  clean_names() %>%
+  left_join(.,
+            gii,
+            by = c("iso" = "iso_code"))
+
+join_gii2 <- world %>%
+  clean_names() %>%
+  left_join(.,
+            gii,
+            by = c("country" = "country"))
+```
+
