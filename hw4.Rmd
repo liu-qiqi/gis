@@ -23,14 +23,13 @@ library(janitor)
 Read in global gender inequality data and the world countries
 
 ```{r}
-here::here()
 
-composite_indices <- read_csv(here::here("/Users/akira/Documents/CASA/GIS/WK4/hw4/hw4_data/HDR21-22_Composite_indices_complete_time_series.csv"), 
+composite_indices <- read_csv(("/Users/akira/Documents/CASA/GIS/WK4/hw4/hw4_data/HDR21-22_Composite_indices_complete_time_series.csv"), 
                               locale = locale(encoding = "latin1"), 
                               na = " ", 
                               skip = 0)
 
-world <- st_read("hw4_data/World_Countries_(Generalized)/World_Countries__Generalized_.shp")
+world <- st_read("/Users/akira/Documents/CASA/GIS/WK4/hw4/hw4_data/World_Countries_(Generalized)/World_Countries__Generalized_.shp")
 ```
 
 ## Change column names
