@@ -63,10 +63,5 @@ join_gii <- world %>%
             gii,
             by = c("iso" = "iso_code"))
 
-join_gii2 <- world %>%
-  clean_names() %>%
-  left_join(.,
-            gii,
-            by = c("country" = "country"))
 ```
 
